@@ -1,0 +1,160 @@
+﻿@using LogicLayer.Intities
+@model List<ProjectDTO>
+
+
+@{
+    ViewBag.Title = "Index";
+    bool error = (bool)ViewData["error"];
+}
+<div>
+    <h3>Projects <button class="button_create" onclick="show('create','block', '')"></button></h3>
+</div>
+
+@if (error)
+{
+    <h3> <mark>Attempt to enter an incorrect id</mark></h3>
+}
+
+<a>@Model.Count шт</a>
+
+<table class="table">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            is comlited
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.idProject)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.openingDate)
+            </td>
+            <td>
+                @if (item.isComplited)
+                {
+                    <img src="~/Icons/finish.png" />
+                }
+
+            </td>
+            <td>
+                @Html.ActionLink(" ", "Details", new { id = item.idProject }, new { @class = "button_setting" })
+                <button onclick="show('delete','block', @item.idProject )" class="button_delete"></button>
+            </td>
+        </tr>
+    }
+</table>
+
+
+
+
+
+<div id="delete">
+    <a class="button_cancel" onclick="show('delete','none', 0)"></a>
+    <br />
+    <a>
+        Are you sure you want to delete this project? The project will be permanently deleted with all tasks.
+    </a>
+    <div class="form">
+        <form name="delete" id="form_delete" action="#" method="post" onsubmit="return false">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="del_id" name="id" />
+            <input type="button" class="button_accept" id="button_delete" value=" " />
+        </form>
+    </div>
+</div>
+
+
+<div id="create">
+    <a class="button_cancel" onclick="show('create','none','')"></a>
+    <br />
+    <a>
+        Write name of new project:
+    </a>
+    <div class="form">
+
+        <form name="create" id="form_create" action="#" method="post" onsubmit="return false">
+            @Html.AntiForgeryToken()
+            <textarea name="name" id="name_create" style="resize:none; margin: 5px 0 22px 0;" maxlength="50" rows="3"></textarea>
+            <p id="err" style="color:red"></p>
+            <input type="button" class="button_accept" id="button_create" value=" " />
+        </form>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    function show(form, state, idProject) {
+
+        switch (form) {
+            case 'delete':
+                document.getElementById('delete').style.display = state;
+                document.getElementById('del_id').value = idProject;
+                document.getElementById('create').style.display = 'none';
+                break;
+            case 'create':
+                document.getElementById('delete').style.display = 'none';
+                document.getElementById('create').style.display = state;
+                break;
+        }
+    }
+
+    $("#button_create").click(function () {
+        if (document.create.name.value.trim() === "") {
+            document.getElementById('err').innerHTML = "please, write name";
+            // alert("Please provide your name!");
+            document.create.name.focus();
+        } else
+            $.post("Project/Create",
+            {
+                name: document.create.name.value
+            },
+        function (status) {
+            console.log(status);
+            if (status['status'] == 200) {
+                location.reload();
+            } else {
+                document.getElementById('create').style.display = 'none';
+                alert("Server error" + "\nStatus: " + status['status'] + "\nMessage: " + status['message']);
+
+            }
+
+        });
+    });
+
+    $("#button_delete").click(function () {
+        $.post("Project/Delete",
+        {
+            id: document.delete.id.value
+        },
+        function (status) {
+            console.log(status);
+            if (status['status'] == 200) {
+                location.reload();
+            } else {
+                document.getElementById('delete').style.display = 'none';
+                alert("Server error" + "\nStatus: " + status['status'] + "\nMessage: " + status['message']);
+            }
+
+        });
+    });
+
+</script>

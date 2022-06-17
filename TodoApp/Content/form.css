@@ -1,0 +1,55 @@
+﻿#delete {
+	width: 330px;
+	height: 130px;
+	margin: auto;
+	background: #ff89a6;
+	border: 1px solid #808080;
+	border-radius: 15px;
+	display: none;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+
+}
+
+#create {
+	width: 250px;
+	height: 200px;
+	margin: auto;
+	background: #a1ff9d;
+	border: 1px solid #808080;
+	border-radius: 15px;
+	display: none;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+    align-content:center;
+}
+
+#rename{
+width: 280px;
+	height: 210px;
+	margin: auto;
+	background: #a1ff9d;
+	border: 1px solid #808080;
+	border-radius: 15px;
+	display: none;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.form {
+	width: 250px;
+    height: 130px;
+	margin: 0px auto 20px auto;
+	text-align: center;
+    display:inline-block;
+
+}

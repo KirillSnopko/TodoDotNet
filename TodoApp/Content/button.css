@@ -1,0 +1,95 @@
+﻿.button_delete {
+    background: url('../Icons/delete.png');
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+    border: 0;
+}
+
+.button_setting {
+    background: url('../Icons/setting.png');
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+}
+
+.button_accept {
+    background: url('../Icons/accept.png');
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+    right:auto;
+    border: 0;
+}
+
+.button_cancel {
+    background: url('../Icons/cancel.png')no-repeat 50% 50%;
+    width: 20px;
+    height: 20px;
+    display:inline-block;
+    margin: 10px 0px 0px 250px;
+	cursor: pointer;
+}
+
+.button_create {
+    background: url('../Icons/create.png')no-repeat 50% 50%;
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+    margin: auto;
+	cursor: pointer;
+    border:0;
+}
+
+.button_complited {
+    background: url('../Icons/complited.png')no-repeat 50% 50%;
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+    margin: auto;
+	cursor: pointer;
+    border:0;
+}
+
+.button_finish {
+    background: url('../Icons/finish.png')no-repeat 50% 50%;
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+    margin: auto;
+	cursor: pointer;
+    border:0;
+}
+.button_label {
+    background: url('../Icons/label.png')no-repeat 50% 50%;
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+    margin: auto;
+	cursor: pointer;
+    border:0;
+}
+
+.button_edit {
+    background: url('../Icons/edit.png')no-repeat 50% 50%;
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+    margin: auto;
+	cursor: pointer;
+    border:0;
+}
+
+.button_info {
+    background: url('../Icons/info.png')no-repeat 50% 50%;
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+    margin: auto;
+	cursor: pointer;
+    border:0;
+}
+
+
+
+

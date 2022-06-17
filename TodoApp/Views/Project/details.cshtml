@@ -1,0 +1,214 @@
+﻿@using TodoApp.Models;
+@model ProjectDetails
+@using LogicLayer.Intities;
+
+
+@{
+    ViewBag.Title = "details";
+}
+
+<h2>
+    Project: <mark style="color:blueviolet"> @Model.project.name</mark>
+    @if (Model.project.isComplited)
+    {
+        <img src="~/Icons/finish.png" />
+    }
+    else
+    {
+        <button class="button_edit" id="button_edit" onclick="document.getElementById('rename').style.display = 'block'"></button>
+
+        <button style=" position: absolute;  right: 0;  transform: translateX(-100%);   padding-right:280px" class="button_complited" id="button_complite"></button>
+    }
+</h2>
+
+<h3> Tasks </h3>
+<h4>
+    @if (!Model.project.isComplited)
+    {
+        <form name="create" id="form_create" action="#" method="post" onsubmit="return false">
+            <input type="hidden" id="id_project" name="id" value="@Model.project.idProject" />
+            <textarea name="name" id="name_new" style="resize:none; margin: 5px 0 22px 0; border-radius: 10px; border: 2px solid #808080;" maxlength="50" rows="3" placeholder="New task"></textarea>
+            <button type="button" class="button_accept" id="create_task" value=" "></button>
+            <p id="err" style="color:red"></p>
+        </form>
+    }
+</h4>
+
+
+<a>@Model.tasks.Count шт</a>
+
+<table class="table">
+    <tr>
+
+        <th>
+            Task ID
+        </th>
+        <th>
+            Essence
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Is complited
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.tasks)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.taskId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.essence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date)
+            </td>
+            <td>
+                @if (item.isComplited)
+                {
+                    <img src="~/Icons/finish.png" />
+                }
+            </td>
+            <td>
+                @Html.ActionLink(" ", "DetailsTask", new { id = item.taskId }, new { @class = "button_info" })
+                @if (!Model.project.isComplited)
+                {
+                    <button onclick="temp(@item.taskId )" class="button_delete"></button>
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div id="rename">
+    <a class="button_cancel" onclick="document.getElementById('rename').style.display = 'none'"></a>
+    <br />
+    <p id="message" style="color:blue"></p>
+    <div class="form">
+        <form name="rename" id="form_rename" action="#" method="post" onsubmit="return false">
+            <a>Write new name</a>
+            <input type="hidden" id="id_project" name="id" value="@Model.project.idProject" />
+            <textarea name="name" id="name_new" style="resize:none; margin: 5px 0 22px 0;" maxlength="50" rows="3"></textarea>
+            <p id="err" style="color:red"></p>
+            <input type="button" class="button_accept" id="button_rename" value=" " />
+        </form>
+    </div>
+</div>
+
+<div id="delete">
+    <a class="button_cancel" onclick="document.getElementById('delete').style.display ='none'"></a>
+    <br />
+    <a>
+        Are you sure you want to delete this
+    </a>
+    <div class="form">
+        <form name="delete" id="form_delete" action="#" method="post" onsubmit="return false">
+            <input type="hidden" id="del_id" name="id" />
+            <input type="button" class="button_accept" id="button_delete" value=" " />
+
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $("#button_complite").click(function () {
+        $.post("../Finish",
+        {
+            id: @Model.project.idProject,
+        },
+        function (status) {
+            console.log(status);
+            if (status['status'] == 200) {
+                location.reload();
+            } else {
+                alert("Server error" + "\nStatus: " + status['status'] + "\nMessage: " + status['message']);
+            }
+
+        });
+    });
+
+    $("#button_delete").click(function () {
+        $.post("../DeleteTask",
+        {
+            id: document.delete.id.value,
+        },
+        function (status) {
+            console.log(status);
+            if (status['status'] == 200) {
+                location.reload();
+            } else {
+                document.getElementById('delete').style.display = 'none';
+                alert("Server error" + "\nStatus: " + status['status'] + "\nMessage: " + status['message']);
+            }
+
+        });
+    });
+
+
+
+
+    $("#button_rename").click(function () {
+        document.getElementById('rename').style.display = 'block';
+        if (document.rename.name.value.trim() === "") {
+            document.getElementById('err').innerHTML = "please, write name";
+            // alert("Please provide your name!");
+            document.create.name.focus();
+        } else
+            $.post("../Rename",
+            {
+                id: document.rename.id.value,
+                name: document.rename.name.value
+            },
+        function (status) {
+            console.log(status);
+            if (status['status'] == 200) {
+                location.reload();
+            } else {
+                document.getElementById('rename').style.display = 'none';
+                alert("Server error" + "\nStatus: " + status['status'] + "\nMessage: " + status['message']);
+            }
+
+        });
+    });
+
+    $("#create_task").click(function () {
+        if (document.create.name.value.trim() === "") {
+            document.getElementById('err').innerHTML = "please, write name";
+            // alert("Please provide your name!");
+            document.create.name.focus();
+        } else
+            $.post("../CreateTask",
+            {
+                id: document.create.id.value,
+                name: document.create.name.value
+            },
+        function (status) {
+            console.log(status);
+            if (status['status'] == 200) {
+                location.reload();
+            } else {
+                alert("Server error" + "\nStatus: " + status['status'] + "\nMessage: " + status['message']);
+            }
+
+        });
+    });
+
+    function temp(id){
+        document.getElementById('delete').style.display ='block';
+        document.getElementById('del_id').value = id;
+    }
+
+</script>
+
+
+
+
+
+

@@ -1,0 +1,111 @@
+﻿@model LogicLayer.Intities.TaskDTO
+
+@{
+    ViewBag.Title = "detailsTask";
+}
+
+<div>
+    <h3>
+        Task: <mark style="color:blueviolet"> @Model.essence</mark>
+        @if (!Model.isComplited)
+            {
+            <button class="button_edit" id="button_edit" onclick="document.getElementById('rename').style.display = 'block'"></button>
+            <button style=" position: absolute;  right: 0;  transform: translateX(-100%);   padding-right:280px" class="button_complited" id="button_complite"></button>
+        }
+    </h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.taskId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.taskId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.projectId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.projectId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isComplited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isComplited)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Come back", "Details/" + Model.projectId)
+</p>
+
+
+<div id="rename">
+    <a class="button_cancel" onclick="document.getElementById('rename').style.display = 'none'"></a>
+    <br />
+    <p id="message" style="color:blue"></p>
+    <div class="form">
+        <form name="rename" id="form_rename" action="#" method="post" onsubmit="return false">
+            <a>Write new name</a>
+            <input type="hidden" id="id_project" name="id" value="@Model.taskId" />
+            <textarea name="name" id="name_new" style="resize:none; margin: 5px 0 22px 0;" maxlength="50" rows="3"></textarea>
+            <p id="err" style="color:red"></p>
+            <input type="button" class="button_accept" id="button_rename" value=" " />
+        </form>
+    </div>
+</div>
+
+<script>
+    $("#button_rename").click(function () {
+        document.getElementById('rename').style.display = 'block';
+        if (document.rename.name.value.trim() === "") {
+            document.getElementById('err').innerHTML = "please, write name";
+            // alert("Please provide your name!");
+            document.create.name.focus();
+        } else
+            $.post("../RenameTask",
+            {
+                id: document.rename.id.value,
+                name: document.rename.name.value
+            },
+        function (status) {
+            console.log(status);
+            if (status['status'] == 200) {
+                location.reload();
+            } else {
+                document.getElementById('rename').style.display = 'none';
+                alert("Server error" + "\nStatus: " + status['status'] + "\nMessage: " + status['message']);
+
+            }});
+    });
+
+    $("#button_complite").click(function () {
+        $.post("../FinishTask",
+        {
+            id: @Model.taskId,
+        },
+        function (status) {
+            console.log(status);
+            if (status['status'] == 200) {
+                location.reload();
+            } else {
+                alert("Server error" + "\nStatus: " + status['status'] + "\nMessage: " + status['message']);
+            }
+
+        });
+    });
+</script>
